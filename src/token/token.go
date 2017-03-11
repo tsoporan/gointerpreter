@@ -4,7 +4,7 @@ type TokenType string
 
 type Token struct {
 	Type    TokenType
-	Literal String
+	Literal string
 }
 
 const (
@@ -23,10 +23,10 @@ const (
 	COMMA     = ","
 	SEMICOLON = ","
 
-	LPAREN  = "("
-	RPARENT = ")"
-	LBRACE  = "{"
-	RBRACE  = "}"
+	LPAREN = "("
+	RPAREN = ")"
+	LBRACE = "{"
+	RBRACE = "}"
 
 	// Keywords
 	FUNCTION = "FUNCTION"
