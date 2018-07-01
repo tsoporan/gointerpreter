@@ -1,19 +1,24 @@
+/*
+ * A token is effectively a string that can be easily categorized
+ */
+
 package token
 
 type TokenType string
 
 type Token struct {
 	Type    TokenType
-	Literal string
+	Value   string
 }
 
+// Define token types
 const (
-	ILLEGAL = "ILLEGAL"
+	ILLEGAL = "ILLEGAL" // Fallback when no match
 	EOF     = "EOF"
 
 	// Identifiers + literals
-	IDENT = "IDENT"
-	INT   = "INT"
+	IDENT = "IDENT" // x, y, add
+	INT   = "INT" // 1
 
 	// Operators
 	ASSIGN = "="
@@ -21,7 +26,7 @@ const (
 
 	// Delimiters
 	COMMA     = ","
-	SEMICOLON = ","
+	SEMICOLON = ";"
 
 	LPAREN = "("
 	RPAREN = ")"
