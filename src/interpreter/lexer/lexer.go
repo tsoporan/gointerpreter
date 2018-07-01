@@ -1,12 +1,17 @@
+/*
+ * The lexer is responsible for the "lexical analysis", turning the source code into tokens, also known
+ * as tokenizer or scanner.
+ */
+
 package lexer
 
-import "token"
+import "interpreter/token"
 
 type Lexer struct {
-	input        string
-	position     int  // current position in input (points to current char)
-	readPosition int  // current reading position in input (after current char)
-	ch           byte // current char under examination
+	input             string
+	position          int  // Points to current char
+	nextReadPosition  int  // Points to next char
+	current           byte // Current char under examination
 }
 
 func New(input string) *Lexer {
@@ -16,48 +21,48 @@ func New(input string) *Lexer {
 }
 
 func (l *Lexer) readChar() {
-
 	// Only supports ascii for now
-	if l.readPosition >= len(l.input) {
-		l.ch = 0 // we reached the end
+	if l.nextReadPosition >= len(l.input) {
+		l.current = 0 // End
 	} else {
-		l.ch = l.input[l.readPosition] // set to the next char
+		l.current = l.input[l.nextReadPosition] // set to the next char
 	}
 
-	// bump the positions
-	l.position = l.readPosition
-	l.readPosition += 1
+	// Move position pointers
+	l.position = l.nextReadPosition
+	l.nextReadPosition += 1
 }
 
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
-	switch l.ch {
+	switch l.current {
 	case '=':
-		tok = newToken(token.ASSIGN, l.ch)
+		tok = newToken(token.ASSIGN, l.current)
 	case ';':
-		tok = newToken(token.SEMICOLON, l.ch)
+		tok = newToken(token.SEMICOLON, l.current)
 	case '(':
-		tok = newToken(token.LPAREN, l.ch)
+		tok = newToken(token.LPAREN, l.current)
 	case ')':
-		tok = newToken(token.RPAREN, l.ch)
+		tok = newToken(token.RPAREN, l.current)
 	case ',':
-		tok = newToken(token.COMMA, l.ch)
+		tok = newToken(token.COMMA, l.current)
 	case '+':
-		tok = newToken(token.PLUS, l.ch)
+		tok = newToken(token.PLUS, l.current)
 	case '{':
-		tok = newToken(token.LBRACE, l.ch)
+		tok = newToken(token.LBRACE, l.current)
 	case '}':
-		tok = newToken(token.RBRACE, l.ch)
+		tok = newToken(token.RBRACE, l.current)
 	case 0:
-		tok.Literal = ""
+		tok.Value = ""
 		tok.Type = token.EOF
 	}
 
 	l.readChar()
+
 	return tok
 }
 
 func newToken(tokenType token.TokenType, ch byte) token.Token {
-	return token.Token{Type: tokenType, Literal: string(ch)}
+	return token.Token{Type: tokenType, Value: string(ch)}
 }
