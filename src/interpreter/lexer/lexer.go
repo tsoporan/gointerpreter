@@ -8,10 +8,10 @@ package lexer
 import "interpreter/token"
 
 type Lexer struct {
-	input             string
-	position          int  // Points to current char
-	nextReadPosition  int  // Points to next char
-	current           byte // Current char under examination
+	input            string
+	position         int  // Points to current char
+	nextReadPosition int  // Points to next char
+	current          byte // Current char under examination
 }
 
 func New(input string) *Lexer {
@@ -56,6 +56,13 @@ func (l *Lexer) NextToken() token.Token {
 	case 0:
 		tok.Value = ""
 		tok.Type = token.EOF
+	default:
+		if isLetter(l.current) {
+			tok.Value = l.readIdentifier()
+			return tok
+		} else {
+			tok = newToken(token.ILLEGAL, l.current)
+		}
 	}
 
 	l.readChar()
@@ -65,4 +72,18 @@ func (l *Lexer) NextToken() token.Token {
 
 func newToken(tokenType token.TokenType, ch byte) token.Token {
 	return token.Token{Type: tokenType, Value: string(ch)}
+}
+
+func (l *Lexer) readIdentifier() string {
+	start := l.position
+
+	for isLetter(l.current) {
+		l.readChar()
+	}
+
+	return l.input[start:l.position]
+}
+
+func isLetter(ch byte) bool {
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
