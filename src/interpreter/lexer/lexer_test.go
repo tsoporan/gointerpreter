@@ -3,8 +3,8 @@
 package lexer
 
 import (
-	"testing"
 	"interpreter/token"
+	"testing"
 )
 
 func TestNextToken(t *testing.T) {
@@ -19,8 +19,8 @@ func TestNextToken(t *testing.T) {
 	`
 
 	tests := []struct {
-		expectedType    token.TokenType
-		expectedValue   string
+		expectedType  token.TokenType
+		expectedValue string
 	}{
 		// Assign five
 		{token.LET, "let"},
