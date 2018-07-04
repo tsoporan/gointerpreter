@@ -9,15 +9,17 @@ import (
 
 func TestNextToken(t *testing.T) {
 	input := `let five = 5;
-	let ten = 10;
-	
-	let add = fn(x, y) {
-		x + y;
-	};
+  let ten = 10;
 
-	let result = add(five, ten);
+  let add = fn(x, y) {
+  x + y;
+  };
+
+  let result = add(five, ten);
   !-/*3;
   6 < 10 > 2
+
+  if (1<2) { return true; } else { return false; }
 	`
 
 	tests := []struct {
@@ -68,21 +70,39 @@ func TestNextToken(t *testing.T) {
 		{token.RPAREN, ")"},
 		{token.SEMICOLON, ";"},
 
+		// !-/*3;
+		{token.BANG, "!"},
+		{token.MINUS, "-"},
+		{token.SLASH, "/"},
+		{token.ASTERISK, "*"},
+		{token.INT, "3"},
+		{token.SEMICOLON, ";"},
 
-    // !-/*3;
-    {token.BANG, "!"},
-    {token.MINUS, "-"},
-    {token.SLASH, "/"},
-    {token.ASTERISK, "*"},
-    {token.INT, "3"},
-    {token.SEMICOLON, ";"},
+		// 6 < 10 > 2
+		{token.INT, "6"},
+		{token.LT, "<"},
+		{token.INT, "10"},
+		{token.GT, ">"},
+		{token.INT, "2"},
 
-    // 6 < 10 > 2
-    {token.INT, "6"},
-    {token.LT, "<"},
-    {token.INT, "10"},
-    {token.GT, ">"},
-    {token.INT, "2"},
+		// if (1<2) { return true; } else { return false; }
+		{token.IF, "if"},
+		{token.LPAREN, "("},
+		{token.INT, "1"},
+		{token.LT, "<"},
+		{token.INT, "2"},
+		{token.RPAREN, ")"},
+		{token.LBRACE, "{"},
+		{token.RETURN, "return"},
+		{token.TRUE, "true"},
+		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
+		{token.ELSE, "else"},
+		{token.LBRACE, "{"},
+		{token.RETURN, "return"},
+		{token.FALSE, "false"},
+		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
 
 		{token.EOF, ""},
 	}
