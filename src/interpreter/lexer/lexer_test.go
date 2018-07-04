@@ -20,6 +20,9 @@ func TestNextToken(t *testing.T) {
   6 < 10 > 2
 
   if (1<2) { return true; } else { return false; }
+
+  1 == 1
+  1 != 2
 	`
 
 	tests := []struct {
@@ -103,6 +106,16 @@ func TestNextToken(t *testing.T) {
 		{token.FALSE, "false"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
+
+		// 1 == 1
+		{token.INT, "1"},
+		{token.EQ, "=="},
+		{token.INT, "1"},
+
+		// 1 != 2
+		{token.INT, "1"},
+		{token.NOT_EQ, "!="},
+		{token.INT, "2"},
 
 		{token.EOF, ""},
 	}

@@ -20,17 +20,32 @@ func New(input string) *Lexer {
 	return l
 }
 
+/*
+  Reads in the next character if possible and moves the position forwards
+  Only 'ascii' characters are supported!
+*/
 func (l *Lexer) readChar() {
-	// Only supports ascii for now
 	if l.nextReadPosition >= len(l.input) {
-		l.current = 0 // End
+		l.current = 0
 	} else {
-		l.current = l.input[l.nextReadPosition] // set to the next char
+		l.current = l.input[l.nextReadPosition] // Set next
 	}
 
-	// Move position pointers
+	// Update pointers
 	l.position = l.nextReadPosition
 	l.nextReadPosition += 1
+}
+
+/*
+  Looks at the next char and returns it
+  Similar to readChar but does not update positions
+*/
+func (l *Lexer) peekChar() byte {
+	if l.nextReadPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.nextReadPosition]
+	}
 }
 
 func (l *Lexer) NextToken() token.Token {
@@ -40,7 +55,13 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.current {
 	case '=':
-		tok = newToken(token.ASSIGN, l.current)
+		if l.peekChar() == '=' {
+			ch := l.current
+			l.readChar()
+			tok = makeTwoToken(token.EQ, ch, l.current)
+		} else {
+			tok = newToken(token.ASSIGN, l.current)
+		}
 	case ';':
 		tok = newToken(token.SEMICOLON, l.current)
 	case '(':
@@ -56,7 +77,13 @@ func (l *Lexer) NextToken() token.Token {
 	case '}':
 		tok = newToken(token.RBRACE, l.current)
 	case '!':
-		tok = newToken(token.BANG, l.current)
+		if l.peekChar() == '=' {
+			ch := l.current
+			l.readChar()
+			tok = makeTwoToken(token.NOT_EQ, ch, l.current)
+		} else {
+			tok = newToken(token.BANG, l.current)
+		}
 	case '-':
 		tok = newToken(token.MINUS, l.current)
 	case '/':
@@ -91,6 +118,11 @@ func (l *Lexer) NextToken() token.Token {
 
 func newToken(tokenType token.TokenType, ch byte) token.Token {
 	return token.Token{Type: tokenType, Value: string(ch)}
+}
+
+func makeTwoToken(tokenType token.TokenType, first byte, second byte) token.Token {
+	value := string(first) + string(second)
+	return token.Token{Type: tokenType, Value: value}
 }
 
 func (l *Lexer) readIdentifier() string {
