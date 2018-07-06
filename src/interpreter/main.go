@@ -1,3 +1,7 @@
+/*
+  Entry into the interpreter, spins up the REPL
+*/
+
 package main
 
 import (
