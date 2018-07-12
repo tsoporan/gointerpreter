@@ -22,8 +22,8 @@ type Expression interface {
 
 // Root node
 type Program struct {
-	// Each program is a series of statements, which is a slice of AST nodes which
-	// implement the Statement interface
+	/* Each program is a series of statements, which is a slice of AST nodes which
+	implement the Statement interface */
 	Statements []Statement
 }
 
