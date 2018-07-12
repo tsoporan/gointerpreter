@@ -48,6 +48,9 @@ func (l *Lexer) peekChar() byte {
 	}
 }
 
+/*
+  Determine the token based on current character and next (peeked)
+*/
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
@@ -120,6 +123,10 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 	return token.Token{Type: tokenType, Value: string(ch)}
 }
 
+/*
+  Construct a token from two characters
+  Used for multi token such as: ==, !=, etc.
+*/
 func makeTwoToken(tokenType token.TokenType, first byte, second byte) token.Token {
 	value := string(first) + string(second)
 	return token.Token{Type: tokenType, Value: value}
@@ -154,8 +161,6 @@ func isLetter(ch byte) bool {
 }
 
 func (l *Lexer) skipWhiteSpace() {
-	// cur := l.current
-
 	// Skip over any whitespace
 	for l.current == ' ' || l.current == '\t' || l.current == '\n' || l.current == '\r' {
 		l.readChar()
