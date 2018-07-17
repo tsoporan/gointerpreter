@@ -132,6 +132,9 @@ func makeTwoToken(tokenType token.TokenType, first byte, second byte) token.Toke
 	return token.Token{Type: tokenType, Value: value}
 }
 
+/*
+  Reads in the identifier as letters untl a non-letter
+*/
 func (l *Lexer) readIdentifier() string {
 	start := l.position
 
@@ -142,6 +145,9 @@ func (l *Lexer) readIdentifier() string {
 	return l.input[start:l.position]
 }
 
+/*
+  Reads in a number as digits until a non-digit
+*/
 func (l *Lexer) readNumber() string {
 	start := l.position
 
