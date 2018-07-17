@@ -15,15 +15,27 @@ type Statement interface {
 	statementNode()
 }
 
+type LetStatement struct {
+	Token token.Token // LET token
+	Name  *Identifier
+	Value Expression
+}
+
+type Identifier struct {
+	Token token.Token // IDENT token
+	Value string
+}
+
 type Expression interface {
-	Node
+	Node // " "
 	expressionNode()
 }
 
-// Root node
+/*
+  Each program is a series of statements, which is a slice of AST nodes which
+	implement the Statement interface
+*/
 type Program struct {
-	/* Each program is a series of statements, which is a slice of AST nodes which
-	implement the Statement interface */
 	Statements []Statement
 }
 
@@ -35,20 +47,9 @@ func (p *Program) TokenLiteral() string {
 	}
 }
 
-type Identifier struct {
-	Token token.Token // IDENT token
-	Value string
-}
-
 // Implements Expression, Identifiers can eventually produce values (RHS)
 func (i *Identifier) expressionNode()      {}
 func (i *Identifier) TokenLiteral() string { return i.Token.Value }
-
-type LetStatement struct {
-	Token token.Token // LET token
-	Name  *Identifier
-	Value Expression
-}
 
 // Implements Statement
 func (ls *LetStatement) statementNode()       {}
