@@ -39,7 +39,7 @@ let foo = 121212;
   tests := []ExpectedIdentifier {
     {"x"},
     {"y"},
-    {"foobar"},
+    {"foo"},
   }
 
   for i, expectedIdent := range tests {
